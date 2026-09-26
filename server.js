@@ -1,28 +1,22 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import studentRoutes from './routes/studentRoutes.js';
+import { connectDB } from './db.js';
+import routes from './routes.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = 5001;
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'Student Records API is running'
+    message: 'User Service is running'
   });
 });
 
-app.use('/students', studentRoutes);
+app.use(routes);
 
-mongoose.connect('mongodb://127.0.0.1:27017/student_records')
-  .then(() => {
-    console.log('MongoDB connected');
-
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('MongoDB connection failed:', error.message);
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`User Service running on http://localhost:${PORT}`);
   });
+});
